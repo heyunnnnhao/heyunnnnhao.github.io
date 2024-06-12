@@ -8,6 +8,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
 const globAll = require("glob-all");
 const CopyPlugin = require("copy-webpack-plugin");
+const { resolvePath } = require("./util");
 
 module.exports = merge(baseConfig, {
   mode: "production",
@@ -19,8 +20,8 @@ module.exports = merge(baseConfig, {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, "../public"), // 复制public下文件
-          to: path.resolve(__dirname, "../dist"), // 复制到dist目录中
+          from: resolvePath("public"), // 复制public下文件
+          to: resolvePath("dist"), // 复制到dist目录中
           filter: (source) => {
             return !source.includes("index.html") && !source.includes(".git"); // 忽略index.html
           },

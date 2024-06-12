@@ -1,12 +1,11 @@
 // webpack.base.js
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { DefinePlugin } = require("webpack");
 const { ProvidePlugin } = require("webpack");
+const { resolvePath } = require("./util");
 
 const isDev = process.env.NODE_ENV === "development";
-const resolvePath = (dirname) => path.resolve(__dirname, "../", dirname);
 
 module.exports = {
   entry: resolvePath("src/index.tsx"),
