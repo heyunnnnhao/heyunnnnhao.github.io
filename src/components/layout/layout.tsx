@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { Suspense, CSSProperties } from "react";
 import { NavLink, useLocation, Outlet } from "react-router-dom";
 
 import "./layout.scss";
@@ -6,9 +6,14 @@ import "./layout.scss";
 export function Layout() {
   return (
     <>
-      <div className="header"></div>
+      <div className="header">
+        <NavLink to={""}>home</NavLink>
+        <NavLink to={"test"}>test</NavLink>
+      </div>
       <div className="container">
-        <Outlet />
+        <Suspense fallback={<></>}>
+          <Outlet />
+        </Suspense>
       </div>
       <div className="footer"></div>
     </>

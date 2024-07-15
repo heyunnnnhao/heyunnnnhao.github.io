@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import Api from "src/api";
 
-export default function Home() {
+export default function Test() {
   useEffect(() => {
     (async () => {})();
   }, []);
 
-  return <div>home</div>;
+  return <div>test</div>;
 }
