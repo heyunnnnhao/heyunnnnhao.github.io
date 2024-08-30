@@ -7,6 +7,38 @@ const { resolvePath } = require("./util");
 
 const isDev = process.env.NODE_ENV === "development";
 
+const browserLists = ["Android >= 4.0", "iOS >= 6", "last 5 QQAndroid versions", "last 5 UCAndroid versions"];
+
+const styleLoaders = [
+  {
+    loader: isDev ? "style-loader" : MiniCssExtractPlugin.loader,
+  },
+  {
+    loader: "css-loader",
+    options: {
+      modules: {
+        auto: /.*\.(module|m)\.(sc|sa|le)ss/gi,
+        localIdentName: "[local]_[contenthash:base64:5]",
+        exportLocalsConvention: "camelCase",
+      },
+    },
+  },
+  {
+    loader: "postcss-loader",
+    options: {
+      postcssOptions: {
+        plugins: [
+          require("autoprefixer")({
+            overrideBrowserslist: browserLists,
+            cascade: true,
+          }),
+        ],
+        remove: false,
+      },
+    },
+  },
+];
+
 module.exports = {
   entry: resolvePath("src/index.tsx"),
   output: {
@@ -21,13 +53,38 @@ module.exports = {
         test: /\.css$/,
         enforce: "pre",
         include: [resolvePath("src")],
-        use: [isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
+        use: [...styleLoaders],
       },
       {
         test: /\.s[ac]ss$/i,
         enforce: "pre",
         include: [resolvePath("src")],
-        use: [isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+        use: [
+          ...styleLoaders,
+          {
+            loader: "sass-loader",
+            options: {
+              implementation: "sass",
+            },
+          },
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          ...styleLoaders,
+          {
+            loader: "less-loader",
+            options: {
+              implementation: "less",
+              webpackImporter: true,
+              lessOptions: {
+                strictMath: false,
+                javascriptEnabled: true,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(ts|tsx)$/,
@@ -45,7 +102,7 @@ module.exports = {
                 dynamicImport: true,
               },
               transform: null,
-              target: "es2016",
+              target: "es5",
               externalHelpers: false,
               keepClassNames: true,
             },
